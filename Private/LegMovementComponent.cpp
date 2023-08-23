@@ -50,13 +50,12 @@ FHitResult ULegMovementComponent::Linetrace(FVector Start, FVector End)
 
 void ULegMovementComponent::UpdateLegWalk(float DeltaTime)
 {
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "Walking");
 	RayStart = GetComponentLocation();
 	RayEnd = GetComponentTransform().GetRotation().GetForwardVector() * LineTraceDistance + RayStart;
 
 	LineTracePos = Linetrace(RayStart, RayEnd).Location;
 
-	TargetPosition = PlayerCharacter->GetMovementComponent()->Velocity / 14.f + LineTracePos;
+	TargetPosition = (PlayerCharacter->GetMovementComponent()->Velocity / VelocityDivider) + LineTracePos;
 
 	if((FootPosition - TargetPosition).Length() > StepDistance && bIsPlanted && LegManager->CheckCanLegUnplant(this))
 	{
@@ -82,14 +81,15 @@ void ULegMovementComponent::TakeFootStep(float DeltaTime)
 	float t = StepSpeedCurve->GetFloatValue(PercentageReplanted);
 	float FootHeight = StepHeightCurve->GetFloatValue(PercentageReplanted) * StepHeight;
 
-	FootPosNoHeight = FMath::Lerp(PlantStartPosition, TargetPosition, t);
+	FootPosition = FVector(
+		FMath::Lerp(PlantStartPosition, TargetPosition, t).X,
+		FMath::Lerp(PlantStartPosition, TargetPosition, t).Y,
+		FMath::Lerp(PlantStartPosition, TargetPosition, t).Z + FootHeight
+	);
 
-	FootPosition = FVector(FootPosNoHeight.X, FootPosNoHeight.Y, FootPosNoHeight.Z + FootHeight);
-	
+	TimeSinceUnplanted += DeltaTime;
 
-	TimeSinceUnplanted = TimeSinceUnplanted + DeltaTime;
-
-	if(TimeSinceUnplanted >= StepTime)
+	if (TimeSinceUnplanted >= StepTime)
 	{
 		bIsPlanted = true;
 		bHasStartedStep = false;
@@ -98,6 +98,5 @@ void ULegMovementComponent::TakeFootStep(float DeltaTime)
 
 void ULegMovementComponent::UpdateLegJump()
 {
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "Jumping");
 	FootPosition = GetComponentLocation() + FVector(0.f,0.f,50.f);
 }

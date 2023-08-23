@@ -40,7 +40,7 @@ private:
 
 	class ULegComponentManager* LegManager;
 	
-	//Calculation Funtions
+	//Calculation Functions
 	UFUNCTION(BlueprintCallable, Category="LineTrace")
 	FHitResult Linetrace(FVector Start, FVector End);
 	
@@ -68,12 +68,14 @@ private:
 	UPROPERTY(EditAnywhere,Category="Movement Variables")
 	float StepHeight;
 
+	UPROPERTY(EditAnywhere, Category = "Movement Variables")
+	float VelocityDivider;
+
 	FVector PlantStartPosition;
 	FVector TargetPosition;
 
 	bool bHasStartedStep = false;
 
-	//TODO Put these on the stack instead?
 	float TimeSinceUnplanted = 0.;
 	float PercentageReplanted = 0.;
 
@@ -81,5 +83,4 @@ private:
 	FVector RayEnd;
 
 	FVector LineTracePos;
-	FVector FootPosNoHeight;
 };
