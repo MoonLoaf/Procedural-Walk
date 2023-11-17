@@ -3,7 +3,7 @@ Actor Components for Bipedal procedural walk animations in UE5
 
 ## Overview
 
-This is an actor component I made for our procedurally animated player character for our game [Sclorp & the crash on planet Snalien](https://oskarwistedt.itch.io/sclorp-the-crash-on-planet-snalien)
+These are two actor components I made for our procedurally animated player character for our game [Sclorp & the crash on planet Snalien](https://oskarwistedt.itch.io/sclorp-the-crash-on-planet-snalien)
 
 ## Features
 
